@@ -1,0 +1,29 @@
+{
+  "name": "Casuistica Soporte",
+  "description": "Agrega el campo CAUSAS a las peticiones de servicio",
+  "version": "2.0",
+  "permissions": [
+    "activeTab",
+    "webNavigation",
+    "*://*/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://msast001pngx.saas.microfocus.com/*"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["https://msast001pngx.saas.microfocus.com/saw/Request/*"]
+  },
+  "browser_action": {
+    "default_title": "Casuística Soporte"
+  },
+  "manifest_version": 2
+  
+}
