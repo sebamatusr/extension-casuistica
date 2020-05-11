@@ -58,50 +58,79 @@ tabindex="-1"
 </div><!-- end ngSwitchWhen: -->
 </div></div>`
 
+var addComboCausa = () => {
+    document.getElementById("withoutResolution_Notes_container").parentNode.insertBefore(htmlObject, document.getElementById("withoutResolution_Notes_container"))
+    if(counter == 0) {
+        document.getElementById('selectCausa').addEventListener('change', () => {
+            var selected = document.getElementById("selectCausa").value;
+            var element = document.getElementById('withoutResolution_Notes_container')
+            var idTextArea = element.querySelector('div[class="cke_inner cke_reset"]').parentNode.previousSibling.getAttribute("id")
+            var script = document.createElement('script');
+
+            var regExGetAllCausas = /\*\*\[.*?\]\*\*/g;
+            var regExGetAllEmptyTags = /<[^/>][^>]*><\/[^>]+>/g;
+
+            script.textContent = `var text = CKEDITOR.instances.${idTextArea}.getData(); text = text.replace(${regExGetAllCausas}, ''); text = text.replace(${regExGetAllEmptyTags}, ''); CKEDITOR.instances.${idTextArea}.setData('**[${selected}]**' + text); CKEDITOR.instances.${idTextArea}.focus()`;
+            
+            document.body.appendChild(script);
+            script.parentNode.removeChild(script);
+            counter++;
+        });
+    }
+}
+
 var element = document.querySelector("a[data-aid='show-more']");
+var mainView = document.getElementById('mainView');
 var counter = 0;
 
-var in_dom = document.body.contains(element);
-var observer = new MutationObserver(function (mutations) {
-    element = document.querySelector("a[data-aid='show-more']");
-    if (document.body.contains(element)) {
-        if (!in_dom) {
-            console.log("element inserted");
-            observer.disconnect();  
-            if (!document.getElementById("withoutResolution_Notes_container")) {
-                var botonMostrar = document.querySelector("a[data-aid='show-more']")
-                botonMostrar.addEventListener("click", function () {
-                    document.getElementById("withoutResolution_Notes_container").parentNode.insertBefore(htmlObject, document.getElementById("withoutResolution_Notes_container"))
-                    if(counter == 0) {
-                        document.getElementById('selectCausa').addEventListener('change', () => {
-                        var selected = document.getElementById("selectCausa").value;
-                        var element = document.getElementById('withoutResolution_Notes_container')
-                        var idTextArea = element.querySelector('div[class="cke_inner cke_reset"]').parentNode.previousSibling.getAttribute("id")
-                        var script = document.createElement('script');
+var in_dom = false;
 
-                        var regExGetAllCausas = /\*\*\[.*?\]\*\*/g;
-                        var regExGetAllEmptyTags = /<[^/>][^>]*><\/[^>]+>/g;
-
-                        script.textContent = `var text = CKEDITOR.instances.${idTextArea}.getData(); text = text.replace(${regExGetAllCausas}, ''); text = text.replace(${regExGetAllEmptyTags}, ''); CKEDITOR.instances.${idTextArea}.setData('**[${selected}]**' + text)`;
-
-
-                        //script.textContent = `CKEDITOR.instances.${idTextArea}.setData('**[${selected}]**' + CKEDITOR.instances.${idTextArea}.getData())`
-                        
-                        document.body.appendChild(script);
-                        script.parentNode.removeChild(script);
-                        counter++;
-                    });
-                    }
-                }, false);
-            }
-            else {
-                document.getElementById("withoutResolution_Notes_container").parentNode.insertBefore(htmlObject, document.getElementById("withoutResolution_Notes_container"))
-            }
+var mainObserver = new MutationObserver(function(mutations){  
+    mutations.forEach(function(mutation){
+        if(mutation.addedNodes.length)
+        {
+            Object.values(mutation.addedNodes).filter(item => {
+                if(item.id === 'withoutResolution_Notes_container')
+                {
+                    console.log('withoutResolution_Notes_container added');
+                    addComboCausa();
+                }
+            })
         }
-        in_dom = true;
-    } else if (in_dom) {
-        in_dom = false;
-        console.log("element removed");
-    }
+        if(mutation.removedNodes.length)
+        {
+            Object.values(mutation.removedNodes).filter(item => {
+                if(item.id === 'withoutResolution_Notes_container')
+                {
+                    console.log('withoutResolution_Notes_container removed');
+                }
+            })
+        }
+    })
+})
+
+var bodyObserver = new MutationObserver(function (mutations) {
+    mutations.forEach(function(mutation){
+        if(mutation.addedNodes.length)
+        {
+            Object.values(mutation.addedNodes).filter(item => {
+                if(item.id === 'mainView') {
+                    console.log('added mainView container')
+                    mainObserver.observe(document.getElementById('mainView'), { childList: true, subtree: true})
+                }
+                return item.id === 'mainView';
+            }) 
+        }
+        if(mutation.removedNodes.length)
+        {
+            Object.values(mutation.addedNodes).filter(item => {
+                if(item.id === 'mainView') {
+                    console.log('removed mainView container')
+                    mainObserver.disconnect()
+                }
+                return item.id === 'mainView';
+            }) 
+        }
+    })
 });
-observer.observe(document.body, { childList: true });
+bodyObserver.observe(document.body, { childList: true });
