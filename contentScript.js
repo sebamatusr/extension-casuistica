@@ -19,20 +19,22 @@ tabindex="-1"
 <option>NO APLICA CAUSA</option>
 <option>ANULADO</option>
 <option>APLICACIÓN NO GRABA DATO CORRECTO</option>
+<option>BD FALTA DE INDICES</option>
+<option>BD SQL NO OPTIMIZADO</option>
 <option>CAMBIO IP EN SERVIDOR</option>
 <option>CIERRE ABRUPTO ALICACION</option>
 <option>CLAVE BLOQUEADA/OLVIDADA</option>
 <option>CLAVE CADUCA</option>
 <option>ERROR CONFIGURACION PC</option>
 <option>ERROR DE CONFIGURACIÓN SERVIDOR</option>
+<option>ERROR DE COMUNICACIÓN</option>
 <option>ERROR DIGITACION USUARIO</option>
 <option>ERROR NO CONSIDERADO EN IMPLEMENTACION</option>
 <option>FALLA CONEXIÓN DE RED</option>
 <option>FALLA CONEXIÓN INTERNET</option>
 <option>FALLA CONEXIÓN SAP</option>
 <option>FALLA CREACION SOLPED U ORDEN</option>
-<option>BD FALTA DE INDICES</option>
-<option>BD SQL NO OPTIMIZADO</option>
+<option>FALTA DATO MAESTRO/option>
 <option>GUIAS NO LLEGAN A SAP</option>
 <option>NO EXISTE REPORTE EN EL SISTEMA</option>
 <option>NO SE PUDO DETERMINAR LA CAUSA</option>
